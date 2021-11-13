@@ -77,10 +77,14 @@ WSGI_APPLICATION = 'recommendation.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, "db.sqlite3")
-    }
+     'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'review_db',
+        'USER': 'postgres',
+        'PASSWORD': 'Voda5.',
+        'HOST': 'localhost',
+        'PORT': '5432',
+     }
 }
 
 
