@@ -1,7 +1,10 @@
 {% extends 'main/layout.html' %}
 
-{% block content %}
+{% block title %}
+<title>Home</title>
+{% endblock %}
 
+{% block content %}
 <h1>Movies in DB</h1>
 {% for movie in movies %}
 <li><a href="{% url 'main:details' movie.id %}">{{ movie.name }}</a></li>
