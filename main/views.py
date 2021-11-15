@@ -21,7 +21,16 @@ def details(request, id):
 
 
 def signin(request):
-    return render(request, 'main/login.html')
+    if request.method == "POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('main:home')
+        else:
+            return render(request, 'main/signin.html', {"error": 'Invalid username or password. Try again.'})
+    return render(request, 'main/signin.html')
 
 
 def signup(request):
@@ -37,3 +46,7 @@ def signup(request):
     else:
         form = SignUpForm()
     return render(request, 'main/signup.html', {"form": form})
+
+def logout_user(request):
+    logout(request)
+    return redirect('main:home')

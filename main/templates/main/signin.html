@@ -1,6 +1,18 @@
 {% extends 'main/layout.html' %}
 {% block title %}
 <title>Login</title>
+
+<style>
+    @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+            font-size: 3.5rem;
+        }
+    }
+
+
+
+</style>
+
 {% endblock %}
 
 {% block content %}
@@ -22,37 +34,49 @@
             </div>
 
             <div class="modal-body p-5 pt-0">
-                <form class="">
+
+                <form action='{% url "main:signin" %}' method="POST">
+                    {% csrf_token %}
                     <div class="form-floating mb-3">
-                        <input type="email" class="form-control rounded-4" id="floatingInput"
-                               placeholder="name@example.com">
-                        <label for="floatingInput">Email address</label>
+                        <input type="text" class="form-control rounded-4" id="floatingInput"
+                               placeholder="Enter your username" name="username">
+                        <label for="floatingInput">Username</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="password" class="form-control rounded-4" id="floatingPassword"
-                               placeholder="Password">
+                               placeholder="Password" name="password">
                         <label for="floatingPassword">Password</label>
                     </div>
                     <button class="w-100 mb-2 btn btn-lg rounded-4 btn-primary" type="submit">Sign in</button>
-
-                    <hr class="my-4">
-                    <h2 class="fs-5 fw-bold mb-3">Or use a third-party</h2>
-                    <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-4" type="submit">
-                        <svg class="bi me-1" width="16" height="16">
-                            <use xlink:href="#twitter"></use>
-                        </svg>
-                        Sign in with Twitter
-                    </button>
-                    <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-4" type="submit">
-                        <svg class="bi me-1" width="16" height="16">
-                            <use xlink:href="#google"></use>
-                        </svg>
-                        Sign in with Google
-                    </button>
+                    {% if error %}
+                    <i style="color: red">{{ error }}</i>
+                    {% endif %}
                 </form>
+
+
+                <hr class="my-4">
+                <h2 class="fs-5 fw-bold mb-3">Or use a third-party</h2>
+                <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-4" type="submit">
+                    <svg class="bi me-1" width="16" height="16">
+                        <use xlink:href="#twitter"></use>
+                    </svg>
+                    Sign in with Twitter
+                </button>
+                <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-4" type="submit">
+                    <svg class="bi me-1" width="16" height="16">
+                        <use xlink:href="#google"></use>
+                    </svg>
+                    Sign in with Google
+                </button>
+
+
             </div>
         </div>
     </div>
 </div>
 
 {% endblock %}
+
+
+
+
