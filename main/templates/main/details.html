@@ -5,6 +5,41 @@
 {% endblock %}
 
 {% block content %}
-<h1>{{catalog_item.name}}</h1>
-<p>Average rating: {{catalog_item.average_rating}}</p>
+<div class="container-fluid" style="width:50%">
+    <div class="col">
+        <div class="card mb-3">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <img src="..." class="img-fluid rounded-start" alt="...">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h3 class="card-title">{{catalog_item.name}}</h3>
+                        <p class="card-text"><small class="text-muted">{{catalog_item.group}}</small></p>
+                        <p class="card-text">Review on catalog item.</p>
+
+                        <p class="card-text"><small class="text-muted">Average rating:
+                            {{catalog_item.average_rating}}</small></p>
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            {% if user.is_authenticated %}
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-outline-secondary">
+                                    <a href="#" style="color: black; text-decoration:none">
+                                        Write review
+                                    </a>
+                                </button>
+                            </div>
+                            {% endif %}
+                            <small class="text-muted">9 mins</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
 {% endblock %}

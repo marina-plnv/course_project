@@ -4,10 +4,53 @@
 <title>Home</title>
 {% endblock %}
 
+
 {% block content %}
-<h1>Movies in DB</h1>
-{% for item in catalog_items %}
-<li><a href="{% url 'main:details' item.id %}">{{ item.name }}</a></li>
-{% endfor %}
+
+<div class="d-flex d-md-flex ">
+    <h1 class="bd-title" id="content">Latest reviews</h1>
+</div>
+
+
+<div class="container-fluid">
+
+    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 .col-lg-2 .col-xl-3 g-3">
+        {% for item in catalog_items %}
+        <div class="col">
+            <div class="card mb-3">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <img src="..." class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item.name }}</h5>
+                            <p class="card-text"><small class="text-muted">{{item.group}}</small></p>
+                            <p class="card-text">Review on catalog item.</p>
+
+                            <p class="card-text"><small class="text-muted">Date creation</small></p>
+                            <div class="d-flex justify-content-between align-items-center">
+
+                                {% if user.is_authenticated %}
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <a href="{% url 'main:details' item.id %}"
+                                           style="color: black; text-decoration:none">
+                                            Reviews
+                                        </a>
+                                    </button>
+                                </div>
+                                {% endif %}
+                                <small class="text-muted">9 mins</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
 
 {% endblock %}

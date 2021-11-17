@@ -52,7 +52,6 @@ def logout_user(request):
     logout(request)
     return redirect('main:home')
 
-
 def add_review(request, id):
     if request.user.is_authenticated:
         catalog_item = CatalogItem.objects.get(id=id)
@@ -71,3 +70,7 @@ def add_review(request, id):
         return render(request, "main/details.html", {"form": form})
     else:
         return redirect("main:signin")
+
+def user_reviews(request):
+    # table
+    return render(request, "main/userreviews.html")
