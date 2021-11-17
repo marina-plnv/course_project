@@ -5,17 +5,17 @@ from .forms import *
 
 
 def index(request):
-    movies = Movie.objects.all()
+    catalog_items = CatalogItem.objects.all()
     context = {
-        "movies": movies,
+        "catalog_items": catalog_items,
     }
     return render(request, 'main/index.html', context)
 
 
 def details(request, id):
-    movie = Movie.objects.get(id=id)
+    catalog_item = CatalogItem.objects.get(id=id)
     context = {
-        'movie': movie
+        'catalog_item': catalog_item
     }
     return render(request, 'main/details.html', context)
 
@@ -47,6 +47,27 @@ def signup(request):
         form = SignUpForm()
     return render(request, 'main/signup.html', {"form": form})
 
+
 def logout_user(request):
     logout(request)
     return redirect('main:home')
+
+
+def add_review(request, id):
+    if request.user.is_authenticated:
+        catalog_item = CatalogItem.objects.get(id=id)
+        if request.method == "POST":
+            form = ReviewForm(request.POST or None)
+            if form.is_valid():
+                user_review = form.save(commit=False)
+                user_review.user = request.user
+                user_review.catalog_item = catalog_item
+                user_review.comment = request.POST["comment"]
+                user_review.rating = request.POST["rating"]
+                user_review.save()
+                return redirect("main:details", id)
+        else:
+            form = ReviewForm()
+        return render(request, "main/details.html", {"form": form})
+    else:
+        return redirect("main:signin")

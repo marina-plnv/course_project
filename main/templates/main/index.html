@@ -6,8 +6,8 @@
 
 {% block content %}
 <h1>Movies in DB</h1>
-{% for movie in movies %}
-<li><a href="{% url 'main:details' movie.id %}">{{ movie.name }}</a></li>
+{% for item in catalog_items %}
+<li><a href="{% url 'main:details' item.id %}">{{ item.name }}</a></li>
 {% endfor %}
 
 {% endblock %}
