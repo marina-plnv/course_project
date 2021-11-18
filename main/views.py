@@ -14,8 +14,10 @@ def index(request):
 
 def details(request, id):
     catalog_item = CatalogItem.objects.get(id=id)
+    reviews = Review.objects.all().filter(catalog_item=catalog_item)
     context = {
-        'catalog_item': catalog_item
+        'catalog_item': catalog_item,
+        'reviews': reviews
     }
     return render(request, 'main/details.html', context)
 
@@ -38,7 +40,6 @@ def signup(request):
         form = SignUpForm(request.POST or None)
         if form.is_valid():
             user = form.save()
-            # password1 = form.cleaned_data('password1') используете ModelForm, то нет никакой необходимости играть со словарем cleaned_data
             password = form.cleaned_data.get("password1")
             user = authenticate(username=user.username, password=password)
             login(request, user)
@@ -52,25 +53,32 @@ def logout_user(request):
     logout(request)
     return redirect('main:home')
 
+
+def review(request, id):
+    catalog_item = CatalogItem.objects.get(id=id)
+    context = {
+        'catalog_item': catalog_item,
+    }
+    return render(request, 'main/addreview.html', context)
+
+
 def add_review(request, id):
-    if request.user.is_authenticated:
-        catalog_item = CatalogItem.objects.get(id=id)
-        if request.method == "POST":
-            form = ReviewForm(request.POST or None)
-            if form.is_valid():
-                user_review = form.save(commit=False)
-                user_review.user = request.user
-                user_review.catalog_item = catalog_item
-                user_review.comment = request.POST["comment"]
-                user_review.rating = request.POST["rating"]
-                user_review.save()
-                return redirect("main:details", id)
-        else:
-            form = ReviewForm()
-        return render(request, "main/details.html", {"form": form})
-    else:
-        return redirect("main:signin")
+    catalog_item = CatalogItem.objects.get(id=id)
+    if request.method == "POST":
+        form = ReviewForm(request.POST or None)
+        if form.is_valid():
+            user_review = form.save(commit=False)
+            user_review.user = request.user
+            user_review.catalog_item = catalog_item
+            user_review.comment = request.POST["comment"]
+            user_review.rating = request.POST["rating"]
+            user_review.save()
+    return redirect("main:details", id)
+
 
 def user_reviews(request):
     # table
+    #ordering reviews from new to old
+    #add data to review model
+    #https://stackoverflow.com/questions/68494568/how-to-display-latest-5-orders-by-using-for-loop-in-jinja-django
     return render(request, "main/userreviews.html")

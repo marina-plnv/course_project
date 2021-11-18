@@ -31,7 +31,7 @@
                             <p class="card-text"><small class="text-muted">Date creation</small></p>
                             <div class="d-flex justify-content-between align-items-center">
 
-                                {% if user.is_authenticated %}
+
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-outline-secondary">
                                         <a href="{% url 'main:details' item.id %}"
@@ -40,7 +40,7 @@
                                         </a>
                                     </button>
                                 </div>
-                                {% endif %}
+
                                 <small class="text-muted">9 mins</small>
                             </div>
                         </div>
