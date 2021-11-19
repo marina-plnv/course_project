@@ -45,11 +45,13 @@
         {% for review in reviews %}
         <div class="card mb-3">
             <div class="card-body">
-                <h6 class="text-left">{{ review.user.username }}</h6>
-                <small class="text-muted">
-                    Rating: {{review.rating}}
-                </small>
+                <h5 class="text-left">{{ review.user.username }}</h5>
+                <h6 class="text-left">Rating: {{review.rating}}</h6>
+                <br>
                 <p>{{review.comment}}</p>
+                <small class="text-muted">
+                    {{review.date}}
+                </small>
             </div>
         </div>
         {% endfor %}

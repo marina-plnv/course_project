@@ -17,7 +17,7 @@ def details(request, id):
     reviews = Review.objects.all().filter(catalog_item=catalog_item)
     context = {
         'catalog_item': catalog_item,
-        'reviews': reviews
+        'reviews': reviews.order_by('-date')
     }
     return render(request, 'main/details.html', context)
 
