@@ -5,9 +5,11 @@ from .forms import *
 
 
 def index(request):
-    reviews = Review.objects.all().order_by('-date')
+    latest_reviews = Review.objects.all().order_by('-pk', '-date')
+    highly_rated_reviews = Review.objects.all().order_by('-rating', '-date')
     context = {
-        "reviews": reviews,
+        "latest_reviews": latest_reviews[:6],
+        "highly_rated_reviews": highly_rated_reviews[:6],
     }
     return render(request, 'main/index.html', context)
 
@@ -28,10 +30,10 @@ def movies(request):
 
 def details(request, id):
     catalog_item = CatalogItem.objects.get(id=id)
-    reviews = Review.objects.all().filter(catalog_item=catalog_item)
+    reviews = Review.objects.all().filter(catalog_item=catalog_item).order_by('-date')
     context = {
         'catalog_item': catalog_item,
-        'reviews': reviews.order_by('-date')
+        'reviews': reviews
     }
     return render(request, 'main/details.html', context)
 

@@ -25,7 +25,7 @@ class Review(models.Model):
     # tags = TaggableManager()
     comment = models.TextField(max_length=2000)
     rating = models.PositiveSmallIntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(10)])
-    date = models.DateField(auto_now=True)
+    date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.user.username
