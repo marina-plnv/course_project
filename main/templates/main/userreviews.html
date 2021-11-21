@@ -5,6 +5,49 @@
 {% endblock %}
 
 {% block content %}
-<h1>table</h1>
+<br>
+<div class="row">
+    <div class="col">
+        <div class="card card-body">
+            <form method="get">
+                {{review_filter.form}}
+
+                <button class="btn btn-primary" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+<br>
+
+<div class="row">
+    <div class="col-md">
+        <div class="card card-body">
+            <table class="table table-sm table-md">
+                <tr>
+                    <th>Name</th>
+                    <th>Group</th>
+                    <th>User</th>
+                    <th>Creation date</th>
+                    <th>Review</th>
+                    <th>Rating</th>
+                    <th>Update</th>
+                    <th>Remove</th>
+                </tr>
+                {% for review in reviews %}
+                <tr>
+                    <td>{{review.catalog_item.name}}</td>
+                    <td>{{review.catalog_item.group}}</td>
+                    <td>{{review.user}}</td>
+                    <td>{{review.date}}</td>
+                    <td>{{review.comment}}</td>
+                    <td>{{review.rating}}</td>
+
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

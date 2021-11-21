@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from .models import *
 from .forms import *
+from .filters import ReviewFilter
 
 
 ### calculate average rating
@@ -94,8 +95,12 @@ def add_review(request, id):
 
 
 def user_reviews(request):
-    # table
-    # ordering reviews from new to old
-    # add data to review model
-    # https://stackoverflow.com/questions/68494568/how-to-display-latest-5-orders-by-using-for-loop-in-jinja-django
-    return render(request, "main/userreviews.html")
+    # user???????
+    reviews=Review.objects.all().filter(user=request.user).order_by('-date')
+    review_filter=ReviewFilter(request.GET, queryset=reviews)
+    reviews=review_filter.qs
+    context={
+        "reviews": reviews,
+        "review_filter": review_filter,
+    }
+    return render(request, "main/userreviews.html", context)
