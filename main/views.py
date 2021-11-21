@@ -12,6 +12,20 @@ def index(request):
     return render(request, 'main/index.html', context)
 
 
+def movies(request):
+    movies = CatalogItem.objects.all().filter(group='movie')
+    print(movies)
+    for movie in movies:
+        movie_latest_review = Review.objects.all().filter(catalog_item=movie).order_by('-date')[0]
+        movie.review = movie_latest_review.comment
+        movie.review_date = movie_latest_review.date
+        movie.review_user = movie_latest_review.user
+    context = {
+        "movies": movies,
+    }
+    return render(request, 'main/movies.html', context)
+
+
 def details(request, id):
     catalog_item = CatalogItem.objects.get(id=id)
     reviews = Review.objects.all().filter(catalog_item=catalog_item)
@@ -78,7 +92,7 @@ def add_review(request, id):
 
 def user_reviews(request):
     # table
-    #ordering reviews from new to old
-    #add data to review model
-    #https://stackoverflow.com/questions/68494568/how-to-display-latest-5-orders-by-using-for-loop-in-jinja-django
+    # ordering reviews from new to old
+    # add data to review model
+    # https://stackoverflow.com/questions/68494568/how-to-display-latest-5-orders-by-using-for-loop-in-jinja-django
     return render(request, "main/userreviews.html")
