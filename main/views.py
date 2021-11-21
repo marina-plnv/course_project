@@ -5,9 +5,9 @@ from .forms import *
 
 
 def index(request):
-    catalog_items = CatalogItem.objects.all()
+    reviews = Review.objects.all().order_by('-date')
     context = {
-        "catalog_items": catalog_items,
+        "reviews": reviews,
     }
     return render(request, 'main/index.html', context)
 
