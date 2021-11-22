@@ -8,7 +8,7 @@ from .filters import ReviewFilter
 ### calculate average rating
 
 def index(request):
-    latest_reviews = Review.objects.all().order_by('-pk', '-date')
+    latest_reviews = Review.objects.all().order_by('-date', '-pk')
     highly_rated_reviews = Review.objects.all().order_by('-rating', '-date')
     context = {
         "latest_reviews": latest_reviews[:6],
@@ -17,7 +17,7 @@ def index(request):
     return render(request, 'main/index.html', context)
 
 
-def movies(request): ###### display high average rate movies
+def movies(request):  ###### display high average rate movies
     movies = CatalogItem.objects.all().filter(group='movie')
     for movie in movies:
         movie_latest_review = Review.objects.all().filter(catalog_item=movie).order_by('-date')[0]
@@ -81,26 +81,51 @@ def review(request, id):
 
 
 def add_review(request, id):
-    catalog_item = CatalogItem.objects.get(id=id)
-    if request.method == "POST":
-        form = ReviewForm(request.POST or None)
-        if form.is_valid():
-            user_review = form.save(commit=False)
-            user_review.user = request.user
-            user_review.catalog_item = catalog_item
-            user_review.comment = request.POST["comment"]
-            user_review.rating = request.POST["rating"]
-            user_review.save()
-    return redirect("main:details", id)
+    if request.user.is_authenticated:
+        catalog_item = CatalogItem.objects.get(id=id)
+        if request.method == "POST":
+            form = ReviewForm(request.POST or None)
+            if form.is_valid():
+                user_review = form.save(commit=False)
+                user_review.user = request.user
+                user_review.catalog_item = catalog_item
+                user_review.comment = request.POST["comment"]
+                user_review.rating = request.POST["rating"]
+                user_review.save()
+                return redirect("main:details", id)
+    return redirect('main:details', id)
 
 
 def user_reviews(request):
     # user???????
-    reviews=Review.objects.all().filter(user=request.user).order_by('-date')
-    review_filter=ReviewFilter(request.GET, queryset=reviews)
-    reviews=review_filter.qs
-    context={
-        "reviews": reviews,
-        "review_filter": review_filter,
-    }
-    return render(request, "main/userreviews.html", context)
+    if request.user.is_authenticated:
+        reviews = Review.objects.all().filter(user=request.user).order_by('-date')
+        review_filter = ReviewFilter(request.GET, queryset=reviews)
+        reviews = review_filter.qs
+        context = {
+            "reviews": reviews,
+            "review_filter": review_filter,
+        }
+        return render(request, "main/userreviews.html", context)
+    return redirect('main:home')
+
+
+def edit_review(request, id):
+    review = Review.objects.get(id=id)
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            form = ReviewForm(request.POST, instance=review)
+            if form.is_valid():
+                data = form.save(commit=False)
+                data.save()
+                return redirect("main:userreviews")
+        else:
+            form = ReviewForm(instance=review)
+        return render(request, 'main/editreview.html', {"form": form})
+    return redirect('main:signin')
+
+
+def delete_review(request, id):
+    review = Review.objects.get(id=id)
+    review.delete()
+    return redirect('main:userreviews')
