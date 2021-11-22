@@ -100,11 +100,11 @@ def user_reviews(request):
     # user???????
     if request.user.is_authenticated:
         reviews = Review.objects.all().filter(user=request.user).order_by('-date')
-        review_filter = ReviewFilter(request.GET, queryset=reviews)
-        reviews = review_filter.qs
+        filter = ReviewFilter(request.GET, queryset=reviews)
+        reviews = filter.qs
         context = {
             "reviews": reviews,
-            "review_filter": review_filter,
+            "filter": filter,
         }
         return render(request, "main/userreviews.html", context)
     return redirect('main:home')
