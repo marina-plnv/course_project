@@ -25,7 +25,7 @@
                     <p class="card-text">{{latest_review.comment}}</p>
                     <div class="d-flex justify-content-between align-items-center">
                         <small class="text-muted">Rating: {{latest_review.rating}}</small>
-                        <small class="text-muted">{{latest_review.date }}</small>
+                        <small class="text-muted">{{latest_review.date|date:"d-m-Y" }}</small>
                     </div>
                 </div>
             </div>

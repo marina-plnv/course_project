@@ -24,9 +24,11 @@ def movies(request):  ###### display high average rate movies
         movie.review = movie_latest_review.comment
         movie.review_date = movie_latest_review.date
         movie.review_user = movie_latest_review.user
+
     context = {
         "movies": movies,
     }
+    print([movie.image.url for movie in movies])
     return render(request, 'main/movies.html', context)
 
 
