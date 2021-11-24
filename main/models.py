@@ -12,7 +12,7 @@ class CatalogItem(models.Model):
     ]
     name = models.CharField(max_length=100)
     group = models.CharField(max_length=15, choices=GROUP_CHOICES)
-    image = models.ImageField(upload_to='img/', default=None)#models.URLField(default=None, null=True)
+    image = models.ImageField(upload_to='img/', default=None)
     average_rating = models.FloatField(default=0)
 
     def __str__(self):
