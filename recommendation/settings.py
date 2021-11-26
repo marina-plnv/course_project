@@ -62,7 +62,7 @@ ROOT_URLCONF = 'recommendation.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -84,17 +84,6 @@ WSGI_APPLICATION = 'recommendation.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-# DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.postgresql',
-#        'NAME': 'review_db',
-#        'USER': 'postgres',
-#        'PASSWORD': 'Voda5.',
-#        'HOST': 'localhost',
-#        'PORT': '5432',
-#    }
-# }
 
 DATABASES = {
     'default': {
@@ -124,7 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-SITE_ID = 2
+SITE_ID = 1
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
@@ -170,5 +159,4 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = '/signin/'
-# ACCOUNT_LOGOUT_ON_GET = True
+LOGIN_URL = '/login/'

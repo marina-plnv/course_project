@@ -5,8 +5,6 @@ from .forms import *
 from .filters import ReviewFilter
 
 
-### calculate average rating
-
 def index(request):
     latest_reviews = Review.objects.all().order_by('-date', '-pk')
     highly_rated_reviews = Review.objects.all().order_by('-rating', '-date')
@@ -17,7 +15,7 @@ def index(request):
     return render(request, 'main/index.html', context)
 
 
-def movies(request):  ###### display high average rate movies
+def movies(request):
     movies = CatalogItem.objects.all().filter(group='movie')
     for movie in movies:
         movie_latest_review = Review.objects.all().filter(catalog_item=movie).order_by('-date')[0]
@@ -99,7 +97,6 @@ def add_review(request, id):
 
 
 def user_reviews(request):
-    # user???????
     if request.user.is_authenticated:
         reviews = Review.objects.all().filter(user=request.user).order_by('-date')
         filter = ReviewFilter(request.GET, queryset=reviews)
