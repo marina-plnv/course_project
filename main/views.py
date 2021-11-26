@@ -22,12 +22,25 @@ def movies(request):
         movie.review = movie_latest_review.comment
         movie.review_date = movie_latest_review.date
         movie.review_user = movie_latest_review.user
-
     context = {
         "movies": movies,
     }
     print([movie.image.url for movie in movies])
     return render(request, 'main/movies.html', context)
+
+
+def books(request):
+    books = CatalogItem.objects.all().filter(group='book')
+    for book in books:
+        book_latest_review = Review.objects.all().filter(catalog_item=book).order_by('-date')[0]
+        book.review = book_latest_review.comment
+        book.review_date = book_latest_review.date
+        book.review_user = book_latest_review.user
+    context = {
+        "books": books,
+    }
+    print([book.image.url for book in books])
+    return render(request, 'main/books.html', context)
 
 
 def details(request, id):

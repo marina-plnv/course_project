@@ -1,7 +1,7 @@
 {% extends 'main/layout.html' %}
 
 {% block title %}
-<title>Movie details</title>
+<title>Details</title>
 {% endblock %}
 
 {% block content %}
@@ -16,13 +16,10 @@
                 <div class="col-md-8">
                     <div class="card-body">
                         <h3 class="card-title">{{catalog_item.name}}</h3>
-                        <p class="card-text"><small class="text-muted">{{catalog_item.group}}</small></p>
-                        <br>
-                        <br>
+                        <h5 class="card-text"><small class="text-muted"><i>{{catalog_item.group}}</i></small></h5>
                         <p class="card-text"><small class="text-muted">Average rating:
                             {{catalog_item.average_rating}}</small></p>
                         <div class="d-flex justify-content-between align-items-center">
-
                             {% if user.is_authenticated %}
                             <div class="btn-group">
                                 <button type="button" class="btn btn-outline-secondary">
@@ -33,7 +30,6 @@
                                 </button>
                             </div>
                             {% endif %}
-                            <small class="text-muted">9 mins</small>
                         </div>
                     </div>
                 </div>
