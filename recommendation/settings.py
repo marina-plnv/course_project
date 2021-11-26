@@ -85,14 +85,25 @@ WSGI_APPLICATION = 'recommendation.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': 'review_db',
+#        'USER': 'postgres',
+#        'PASSWORD': 'Voda5.',
+#        'HOST': 'localhost',
+#        'PORT': '5432',
+#    }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'review_db',
-        'USER': 'postgres',
-        'PASSWORD': 'Voda5.',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': 'd4f5riuecrcdce',
+        'HOST': 'ec2-52-22-161-59.compute-1.amazonaws.com',
+        'PORT': 5432,
+        'USER': 'rhpjorhcganrtu',
+        'PASSWORD': '430c8f4df6983a584447f69138d4e650a5ace546dc6d91319457a99a9ce28c6d',
     }
 }
 
@@ -137,7 +148,6 @@ STATIC_URL = "/static/"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -161,4 +171,4 @@ SOCIALACCOUNT_PROVIDERS = {
 
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/signin/'
-#ACCOUNT_LOGOUT_ON_GET = True
+# ACCOUNT_LOGOUT_ON_GET = True
