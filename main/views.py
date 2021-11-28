@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from .models import *
 from .forms import *
 from .filters import ReviewFilter
+from django.db.models import Avg
 
 
 def index(request):
@@ -40,6 +41,7 @@ def books(request):
 def details(request, id):
     catalog_item = CatalogItem.objects.get(id=id)
     reviews = Review.objects.all().filter(catalog_item=catalog_item).order_by('-date')
+    avg_rate = reviews.aggregate(Avg('rating'))['rating__avg']  # ??????????????
     context = {
         'catalog_item': catalog_item,
         'reviews': reviews
@@ -86,6 +88,13 @@ def review(request, id):
     }
     return render(request, 'main/addreview.html', context)
 
+def update_average_rating(catalog_item):
+    reviews = Review.objects.all().filter(catalog_item=catalog_item)  # added???????????????????????
+    avg_rate = reviews.aggregate(Avg('rating'))['rating__avg']  # adda???????????????????????????????
+    avg_rate = round(avg_rate, 2)  # ?????????????????????????????????????????????
+    CatalogItem.objects.filter(id=catalog_item.id).update(average_rating=avg_rate)  # ?????????????????????????????
+
+
 
 def add_review(request, id):
     if request.user.is_authenticated:
@@ -99,6 +108,7 @@ def add_review(request, id):
                 user_review.comment = request.POST["comment"]
                 user_review.rating = request.POST["rating"]
                 user_review.save()
+                update_average_rating(catalog_item)
                 return redirect("main:details", id)
     return redirect('main:details', id)
 
@@ -124,6 +134,7 @@ def edit_review(request, id):
             if form.is_valid():
                 data = form.save(commit=False)
                 data.save()
+                update_average_rating(review.catalog_item)
                 return redirect("main:userreviews")
         else:
             form = ReviewForm(instance=review)
@@ -134,4 +145,5 @@ def edit_review(request, id):
 def delete_review(request, id):
     review = Review.objects.get(id=id)
     review.delete()
+    update_average_rating(review.catalog_item)
     return redirect('main:userreviews')
