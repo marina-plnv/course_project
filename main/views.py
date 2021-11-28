@@ -17,15 +17,9 @@ def index(request):
 
 def movies(request):
     movies = CatalogItem.objects.all().filter(group='movie')
-    for movie in movies:
-        movie_latest_review = Review.objects.all().filter(catalog_item=movie).order_by('-date')[0]
-        movie.review = movie_latest_review.comment
-        movie.review_date = movie_latest_review.date
-        movie.review_user = movie_latest_review.user
     context = {
         "movies": movies,
     }
-    print([movie.image.url for movie in movies])
     return render(request, 'main/movies.html', context)
 
 
