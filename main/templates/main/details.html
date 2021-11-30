@@ -23,7 +23,7 @@
                             {% if user.is_authenticated %}
                             <div class="btn-group">
                                 <button type="button" class="btn btn-outline-secondary">
-                                    <a href="{% url 'main:review' catalog_item.id %}"
+                                    <a href="{% url 'main:addreview' catalog_item.id %}"
                                        style="color: black; text-decoration:none">
                                         Write review
                                     </a>
@@ -44,7 +44,7 @@
                 <h5 class="text-left">{{ review.user.username }}</h5>
                 <h6 class="text-left">Rating: {{review.rating}}</h6>
                 <br>
-                <p>{{review.comment}}</p>
+                <p>{{review.comment|safe}}</p>
                 <small class="text-muted">
                     {{review.date|date:"d-m-Y"}}
                 </small>

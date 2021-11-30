@@ -11,7 +11,6 @@ urlpatterns = [
     path('sign-in/', views.signin, name="signin"),
     path('sign-up/', views.signup, name="signup"),
     path('logout/', views.logout_user, name="logout"),
-    path('review/<int:id>', views.review, name="review"),
     path('user-reviews/', views.user_reviews, name="userreviews"),
     path('add-review/<int:id>/', views.add_review, name="addreview"),
     path('movies/', views.movies, name="movies"),

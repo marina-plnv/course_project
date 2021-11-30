@@ -81,19 +81,11 @@ def logout_user(request):
     return redirect('main:home')
 
 
-def review(request, id):
-    catalog_item = CatalogItem.objects.get(id=id)
-    context = {
-        'catalog_item': catalog_item,
-    }
-    return render(request, 'main/addreview.html', context)
-
 def update_average_rating(catalog_item):
     reviews = Review.objects.all().filter(catalog_item=catalog_item)  # added???????????????????????
     avg_rate = reviews.aggregate(Avg('rating'))['rating__avg']  # adda???????????????????????????????
     avg_rate = round(avg_rate, 2)  # ?????????????????????????????????????????????
     CatalogItem.objects.filter(id=catalog_item.id).update(average_rating=avg_rate)  # ?????????????????????????????
-
 
 
 def add_review(request, id):
@@ -105,11 +97,15 @@ def add_review(request, id):
                 user_review = form.save(commit=False)
                 user_review.user = request.user
                 user_review.catalog_item = catalog_item
+                user_review.review_title = request.POST["review_title"]
                 user_review.comment = request.POST["comment"]
                 user_review.rating = request.POST["rating"]
                 user_review.save()
                 update_average_rating(catalog_item)
                 return redirect("main:details", id)
+        else:
+            form = ReviewForm()
+        return render(request, 'main/addreview.html', {'form': form, 'catalog_item': catalog_item})
     return redirect('main:details', id)
 
 

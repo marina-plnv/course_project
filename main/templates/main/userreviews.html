@@ -43,7 +43,7 @@
                     <td>{{review.catalog_item.group}}</td>
                     <td>{{review.user}}</td>
                     <td>{{review.date}}</td>
-                    <td>{{review.comment}}</td>
+                    <td>{{review.comment|safe}}</td>
                     <td>{{review.rating}}</td>
                     <td><a class="btn btn-sm btn-info" href="{% url 'main:editreview' review.id %}">Edit</a></td>
                     <td><a class="btn btn-sm btn-danger" href="{% url 'main:deletereview' review.id %}"

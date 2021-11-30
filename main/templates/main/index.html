@@ -23,7 +23,7 @@
                     </h5>
                     <h6 class="card-title"><i>{{ latest_review.catalog_item.group }}</i></h6>
                     <br>
-                    <p class="card-text">{{latest_review.comment}}</p>
+                    <p class="card-text">{{latest_review.comment|safe}}</p>
                     <div class="d-flex justify-content-between align-items-center">
                         <small class="text-muted">Rating: {{latest_review.rating}}</small>
                         <small class="text-muted">{{latest_review.date|date:"d-m-Y" }}</small>
@@ -51,7 +51,7 @@
                     </h5>
                     <h6 class="card-title"><i>{{ highly_rated_review.catalog_item.group }}</i></h6>
                     <br>
-                    <p class="card-text">{{highly_rated_review.comment}}</p>
+                    <p class="card-text">{{highly_rated_review.comment|safe}}</p>
                     <div class="d-flex justify-content-between align-items-center">
                         <small class="text-muted">Rating: {{highly_rated_review.rating}}</small>
                         <small class="text-muted">{{highly_rated_review.date|date:"d-m-Y" }}</small>

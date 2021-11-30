@@ -11,4 +11,4 @@ class SignUpForm(UserCreationForm):
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
-        fields = ("comment", "rating")
+        fields = ("review_title", "comment", "rating")
