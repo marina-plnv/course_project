@@ -41,7 +41,6 @@ def books(request):
 def details(request, id):
     catalog_item = CatalogItem.objects.get(id=id)
     reviews = Review.objects.all().filter(catalog_item=catalog_item).order_by('-date')
-    avg_rate = reviews.aggregate(Avg('rating'))['rating__avg']  # ??????????????
     context = {
         'catalog_item': catalog_item,
         'reviews': reviews
@@ -82,10 +81,10 @@ def logout_user(request):
 
 
 def update_average_rating(catalog_item):
-    reviews = Review.objects.all().filter(catalog_item=catalog_item)  # added???????????????????????
-    avg_rate = reviews.aggregate(Avg('rating'))['rating__avg']  # adda???????????????????????????????
-    avg_rate = round(avg_rate, 2)  # ?????????????????????????????????????????????
-    CatalogItem.objects.filter(id=catalog_item.id).update(average_rating=avg_rate)  # ?????????????????????????????
+    reviews = Review.objects.all().filter(catalog_item=catalog_item)
+    avg_rate = reviews.aggregate(Avg('rating'))['rating__avg']
+    avg_rate = round(avg_rate, 2)
+    CatalogItem.objects.filter(id=catalog_item.id).update(average_rating=avg_rate)
 
 
 def add_review(request, id):
@@ -107,6 +106,15 @@ def add_review(request, id):
             form = ReviewForm()
         return render(request, 'main/addreview.html', {'form': form, 'catalog_item': catalog_item})
     return redirect('main:details', id)
+
+
+def like_review(request, item_id, review_id):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            review = Review.objects.get(id=review_id)
+            review.likes.add(request.user)
+            return redirect('main:details', item_id)
+    return redirect('main:signin')
 
 
 def user_reviews(request):

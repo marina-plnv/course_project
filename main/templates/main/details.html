@@ -41,13 +41,29 @@
         {% for review in reviews %}
         <div class="card mb-3">
             <div class="card-body">
-                <h5 class="text-left">{{ review.user.username }}</h5>
+                <h5 class="text-left">{{ review.review_title }}</h5>
+                <h6 class="text-muted"><i>by {{review.user.username}}</i></h6>
                 <h6 class="text-left">Rating: {{review.rating}}</h6>
                 <br>
                 <p>{{review.comment|safe}}</p>
-                <small class="text-muted">
-                    {{review.date|date:"d-m-Y"}}
-                </small>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    {% if user.is_authenticated %}
+                    {% if request.user.id not in review.likes %}
+                    <form action="{% url 'main:likereview' catalog_item.id review.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" name="review_id" , value="{{ review.id }}" class="btn btn-primary btn-sm">
+                            Like
+                        </button>
+                        - {{review.total_likes}} likes
+                    </form>
+                    {% else %}
+                    {{review.total_likes}} likes
+                    {% endif %}
+                    {% endif %}
+                    <small class="text-muted">{{review.date|date:"d-m-Y"}}</small>
+                </div>
+
             </div>
         </div>
         {% endfor %}

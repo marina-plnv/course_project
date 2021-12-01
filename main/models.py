@@ -30,5 +30,18 @@ class Review(models.Model):
     date = models.DateTimeField(auto_now=True)
     likes = models.ManyToManyField(User, related_name="review_like")
 
+    def total_likes(self):
+        return (self.likes.count() if self.likes else 0)
+
     def __str__(self):
         return self.user.username
+
+
+#class Like(models.Model):
+#    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name="review_like")
+#    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="review_like")
+
+#    class Meta:
+#        constraints = [
+ #           models.UniqueConstraint(fields=['user', 'review'], name="unique_like"),
+ #       ]
