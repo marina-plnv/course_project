@@ -4,6 +4,7 @@
 <title>Details</title>
 {% endblock %}
 
+
 {% block content %}
 <div class="container-fluid" style="width:50%">
     <br>
@@ -46,24 +47,21 @@
                 <h6 class="text-left">Rating: {{review.rating}}</h6>
                 <br>
                 <p>{{review.comment|safe}}</p>
-
+                <br>
                 <div class="d-flex justify-content-between align-items-center">
                     {% if user.is_authenticated %}
-                    {% if request.user.id not in review.likes %}
                     <form action="{% url 'main:likereview' catalog_item.id review.id %}" method="POST">
                         {% csrf_token %}
                         <button type="submit" name="review_id" , value="{{ review.id }}" class="btn btn-primary btn-sm">
                             Like
                         </button>
-                        - {{review.total_likes}} likes
+                        <small class="text-muted">- {{review.total_likes}}</small>
                     </form>
                     {% else %}
                     {{review.total_likes}} likes
                     {% endif %}
-                    {% endif %}
                     <small class="text-muted">{{review.date|date:"d-m-Y"}}</small>
                 </div>
-
             </div>
         </div>
         {% endfor %}

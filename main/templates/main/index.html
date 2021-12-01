@@ -11,55 +11,53 @@
     <h1 class="bd-title text-center" id="content-1">Latest reviews</h1>
 </div>
 <div class="container-fluid">
-    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 .col-lg-2 .col-xl-3 g-3">
-        {% for latest_review in latest_reviews %}
-        <div class="col">
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <a href="{% url 'main:details' latest_review.catalog_item.id %}"
-                           style="color: black; text-decoration:none">
-                            {{ latest_review.catalog_item.name }}</a>
-                    </h5>
-                    <h6 class="card-title"><i>{{ latest_review.catalog_item.group }}</i></h6>
-                    <br>
-                    <p class="card-text">{{latest_review.comment|safe}}</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <small class="text-muted">Rating: {{latest_review.rating}}</small>
-                        <small class="text-muted">{{latest_review.date|date:"d-m-Y" }}</small>
-                    </div>
+    {% for latest_review in latest_reviews %}
+    <div class="col">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h4>{{ latest_review.review_title }}</h4>
+                <h6>
+                    <a href="{% url 'main:details' latest_review.catalog_item.id %}"
+                       style="color: black; text-decoration:none">
+                        <i>{{ latest_review.catalog_item.group }} - {{ latest_review.catalog_item.name }}</i>
+                    </a>
+                </h6>
+                <h6 class="text-muted"><i>by {{latest_review.user.username}}</i></h6>
+                <br>
+                <p class="card-text">{{latest_review.comment|safe}}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">Rating: {{latest_review.rating}}</small>
+                    <small class="text-muted">{{latest_review.date|date:"d-m-Y" }}</small>
                 </div>
             </div>
         </div>
-        {% endfor %}
     </div>
+    {% endfor %}
 </div>
 <hr style="border: 3px outset #595955;">
 <div class="container-fluid">
     <h1 class="bd-title text-center" id="content-2">Highly rated reviews</h1>
 </div>
 <div class="container-fluid">
-    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 .col-lg-2 .col-xl-3 g-3">
-        {% for highly_rated_review in highly_rated_reviews %}
-        <div class="col">
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <a href="{% url 'main:details' highly_rated_review.catalog_item.id %}"
-                           style="color: black; text-decoration:none">
-                            {{ highly_rated_review.catalog_item.name }}</a>
-                    </h5>
-                    <h6 class="card-title"><i>{{ highly_rated_review.catalog_item.group }}</i></h6>
-                    <br>
-                    <p class="card-text">{{highly_rated_review.comment|safe}}</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <small class="text-muted">Rating: {{highly_rated_review.rating}}</small>
-                        <small class="text-muted">{{highly_rated_review.date|date:"d-m-Y" }}</small>
-                    </div>
+    {% for highly_rated_review in highly_rated_reviews %}
+    <div class="col">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <a href="{% url 'main:details' highly_rated_review.catalog_item.id %}"
+                       style="color: black; text-decoration:none">
+                        {{ highly_rated_review.catalog_item.name }}</a>
+                </h5>
+                <h6 class="card-title"><i>{{ highly_rated_review.catalog_item.group }}</i></h6>
+                <br>
+                <p class="card-text">{{highly_rated_review.comment|safe}}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">Rating: {{highly_rated_review.rating}}</small>
+                    <small class="text-muted">{{highly_rated_review.date|date:"d-m-Y" }}</small>
                 </div>
             </div>
         </div>
-        {% endfor %}
     </div>
+    {% endfor %}
 </div>
 {% endblock %}

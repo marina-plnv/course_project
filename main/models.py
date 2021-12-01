@@ -36,12 +36,3 @@ class Review(models.Model):
     def __str__(self):
         return self.user.username
 
-
-#class Like(models.Model):
-#    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name="review_like")
-#    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="review_like")
-
-#    class Meta:
-#        constraints = [
- #           models.UniqueConstraint(fields=['user', 'review'], name="unique_like"),
- #       ]
