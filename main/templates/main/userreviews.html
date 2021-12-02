@@ -28,9 +28,9 @@
         <div class="card card-body">
             <table class="table table-sm table-md">
                 <tr>
-                    <th>Name</th>
+                    <th>Title</th>
                     <th>Group</th>
-                    <th>User</th>
+                    <th>Item</th>
                     <th>Creation date</th>
                     <th>Review</th>
                     <th>Rating</th>
@@ -39,10 +39,10 @@
                 </tr>
                 {% for review in reviews %}
                 <tr>
-                    <td>{{review.catalog_item.name}}</td>
+                    <td>{{review.review_title}}</td>
                     <td>{{review.catalog_item.group}}</td>
-                    <td>{{review.user}}</td>
-                    <td>{{review.date}}</td>
+                    <td>{{review.catalog_item.name}}</td>
+                    <td>{{review.date|date:"d-m-Y" }}</td>
                     <td>{{review.comment|safe}}</td>
                     <td>{{review.rating}}</td>
                     <td><a class="btn btn-sm btn-info" href="{% url 'main:editreview' review.id %}">Edit</a></td>

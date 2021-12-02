@@ -12,4 +12,4 @@ class ReviewFilter(django_filters.FilterSet):
     class Meta:
         model = Review
         fields = '__all__'
-        exclude = ['user', 'date', 'rating']
+        exclude = ['user', 'date', 'likes']
