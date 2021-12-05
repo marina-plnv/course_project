@@ -2,9 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from ckeditor.fields import RichTextField
-
-
 # from taggit.managers import TaggableManager
+from django.db.models import CheckConstraint, Q, UniqueConstraint
+
 
 class CatalogItem(models.Model):
     GROUP_CHOICES = [
@@ -21,14 +21,15 @@ class CatalogItem(models.Model):
 
 
 class Review(models.Model):
+    review_title = models.CharField(max_length=100, default="My review")
     catalog_item = models.ForeignKey(CatalogItem, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="review_user")
-    review_title = models.CharField(max_length=100, default="My review")
     # tags = TaggableManager()
     comment = RichTextField(blank=True, null=True)
     rating = models.PositiveSmallIntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(10)])
     date = models.DateTimeField(auto_now=True)
     likes = models.ManyToManyField(User, related_name="review_like")
+    average_star_rating = models.FloatField(default=0)
 
     def total_likes(self):
         return (self.likes.count() if self.likes else 0)
@@ -36,3 +37,38 @@ class Review(models.Model):
     def __str__(self):
         return self.user.username
 
+
+# class StarRating(models.Model):
+#    rate = models.FloatField(default=0, validators=[MinValueValidator(1), MaxValueValidator(5)])
+#    review = models.ForeignKey(Review, on_delete=models.CASCADE)
+#    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+#    class Meta:
+#        constraints = [
+#            CheckConstraint(check=Q(rate__range=(1,5)), name='valid_rate'),
+#            UniqueConstraint(fields=['user', 'review'], name='rating_once')
+#        ]
+
+class RatingStar(models.Model):
+    value = models.SmallIntegerField("value", default=0)
+
+    def __str__(self):
+        return f'{self.value}'
+
+    class Meta:
+        verbose_name = "Rating Star"
+        verbose_name_plural = "Rating Stars"
+        ordering = ["-value"]
+
+
+class Rating(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="rating_user")
+    star = models.ForeignKey(RatingStar, on_delete=models.CASCADE, verbose_name="star")
+    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name="rating_review", verbose_name="review")
+
+    def __str__(self):
+        return f"{self.star}"
+
+    class Meta:
+        verbose_name = "Rating"
+        verbose_name_plural = "Ratings"

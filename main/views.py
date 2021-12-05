@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponse
 from .models import *
 from .forms import *
 from .filters import ReviewFilter
-from django.db.models import Avg
+from django.db.models import Avg, Sum, Count
+from django.views.generic.base import View
 
 
 def index(request):
@@ -43,7 +45,7 @@ def details(request, id):
     reviews = Review.objects.all().filter(catalog_item=catalog_item).order_by('-date')
     context = {
         'catalog_item': catalog_item,
-        'reviews': reviews
+        'reviews': reviews,
     }
     return render(request, 'main/details.html', context)
 
@@ -108,12 +110,12 @@ def add_review(request, id):
     return redirect('main:details', id)
 
 
-def like_review(request, item_id, review_id):
+def like_review(request, review_id):
     if request.user.is_authenticated:
         if request.method == "POST":
             review = Review.objects.get(id=review_id)
             review.likes.add(request.user)
-            return redirect('main:details', item_id)
+            return redirect('main:reviewdetails', review_id)
     return redirect('main:signin')
 
 
@@ -151,3 +153,36 @@ def delete_review(request, id):
     review.delete()
     update_average_rating(review.catalog_item)
     return redirect('main:userreviews')
+
+
+def update_average_review_star_rating(review_id):
+    review_ratings = Rating.objects.all().filter(review=Review.objects.get(id=review_id))
+    avg_star_rating = review_ratings.aggregate(Avg('star'))['star__avg']
+    if avg_star_rating is not None:
+        avg_star_rating = round(avg_star_rating, 2)
+        Review.objects.filter(id=review_id).update(average_star_rating=avg_star_rating)
+
+
+def add_star_rating(request, review_id):
+    form = RatingForm(request.POST)
+    if form.is_valid():
+        Rating.objects.update_or_create(
+            user=request.user,
+            review_id=int(review_id),
+            defaults={'star_id': int(request.POST.get("star"))}
+        )
+        update_average_review_star_rating(review_id)
+
+        return HttpResponse(status=201)  # ?????????????????????
+    else:
+        return HttpResponse(status=400)  # ??????????????????????????
+
+
+def review_details(request, id):
+    review = Review.objects.get(id=id)
+    star_form = RatingForm()  # ?????????????????????????????????????
+    context = {
+        'review': review,
+        'star_form': star_form,
+    }
+    return render(request, "main/reviewdetails.html", context)

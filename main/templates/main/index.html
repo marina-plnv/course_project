@@ -6,7 +6,6 @@
 
 
 {% block content %}
-
 <div class="container-fluid">
     <h1 class="bd-title text-center" id="content-1">Latest reviews</h1>
 </div>
@@ -15,7 +14,16 @@
     <div class="col">
         <div class="card mb-3">
             <div class="card-body">
-                <h4>{{ latest_review.review_title }}</h4>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4>
+                        <a href="{% url 'main:reviewdetails' latest_review.id %}"
+                       style="color: black; text-decoration:none">
+                            {{ latest_review.review_title }}
+                        </a>
+                    </h4>
+                    <h4>{{latest_review.average_star_rating}}<span style="font-size:30px;color:yellow;">&#9733;</span>
+                    </h4>
+                </div>
                 <h6>
                     <a href="{% url 'main:details' latest_review.catalog_item.id %}"
                        style="color: black; text-decoration:none">
@@ -43,12 +51,19 @@
     <div class="col">
         <div class="card mb-3">
             <div class="card-body">
-                <h5 class="card-title">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4>{{ highly_rated_review.review_title }}</h4>
+                    <h4>{{highly_rated_review.average_star_rating}}<span
+                            style="font-size:30px;color:yellow;">&#9733;</span>
+                    </h4>
+                </div>
+                <h6>
                     <a href="{% url 'main:details' highly_rated_review.catalog_item.id %}"
                        style="color: black; text-decoration:none">
-                        {{ highly_rated_review.catalog_item.name }}</a>
-                </h5>
-                <h6 class="card-title"><i>{{ highly_rated_review.catalog_item.group }}</i></h6>
+                        <i>{{ highly_rated_review.catalog_item.group }} - {{ highly_rated_review.catalog_item.name }}</i>
+                    </a>
+                </h6>
+                <h6 class="text-muted"><i>by {{highly_rated_review.user.username}}</i></h6>
                 <br>
                 <p class="card-text">{{highly_rated_review.comment|safe}}</p>
                 <div class="d-flex justify-content-between align-items-center">
