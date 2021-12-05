@@ -12,14 +12,15 @@
 </div>
 <div class="container-fluid">
     <div class="row row-cols-3 row-cols-sm-4 row-cols-md-6 .col-lg-8 .col-xl-8 g-10">
-
-        {% for movie in movies %}
+        {% for book in books %}
         <div class="cols">
-            <div class="card">
-                <img src="{{movie.image.url}}" class="card-img-top" alt="...">
+            <div class="card h-100">
+                <img src="{{book.image.url}}" class="card-img-top" alt="...">
                 <div class="card-body">
-                    <h5 class="card-title">{{movie.name}}</h5>
-                    <a href="{% url 'main:details' movie.id %}" class="btn btn-primary">Reviews</a>
+                    <h5 class="card-title">{{book.name}}</h5>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'main:details' book.id %}" class="btn btn-primary">Reviews</a>
                 </div>
             </div>
         </div>

@@ -1,11 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from .models import *
 from .forms import *
 from .filters import ReviewFilter
-from django.db.models import Avg, Sum, Count
-from django.views.generic.base import View
+from django.db.models import Avg
 
 
 def index(request):
@@ -133,10 +132,10 @@ def user_reviews(request):
 
 
 def edit_review(request, id):
-    review = Review.objects.get(id=id)
+    review = get_object_or_404(Review, id=id)
     if request.user.is_authenticated:
         if request.method == "POST":
-            form = ReviewForm(request.POST, instance=review)
+            form = ReviewForm(request.POST or None, instance=review)
             if form.is_valid():
                 data = form.save(commit=False)
                 data.save()
@@ -172,15 +171,14 @@ def add_star_rating(request, review_id):
             defaults={'star_id': int(request.POST.get("star"))}
         )
         update_average_review_star_rating(review_id)
-
-        return HttpResponse(status=201)  # ?????????????????????
+        redirect('main:reviewdetails', review_id)
     else:
-        return HttpResponse(status=400)  # ??????????????????????????
+        return HttpResponse(status=400)
 
 
 def review_details(request, id):
     review = Review.objects.get(id=id)
-    star_form = RatingForm()  # ?????????????????????????????????????
+    star_form = RatingForm()
     context = {
         'review': review,
         'star_form': star_form,

@@ -5,7 +5,6 @@ from .models import *
 
 admin.site.register(CatalogItem)
 admin.site.register(Review)
-#admin.site.register(Rating)
 admin.site.register(RatingStar)
 
 
