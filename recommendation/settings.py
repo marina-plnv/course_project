@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'django_filters',
     'ckeditor',
     'ckeditor_uploader',
-    'taggit',
 ]
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
