@@ -27,15 +27,9 @@ def movies(request):
 
 def books(request):
     books = CatalogItem.objects.all().filter(group='book')
-    for book in books:
-        book_latest_review = Review.objects.all().filter(catalog_item=book).order_by('-date')[0]
-        book.review = book_latest_review.comment
-        book.review_date = book_latest_review.date
-        book.review_user = book_latest_review.user
     context = {
         "books": books,
     }
-    print([book.image.url for book in books])
     return render(request, 'main/books.html', context)
 
 
