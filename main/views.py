@@ -78,8 +78,9 @@ def logout_user(request):
 def update_average_rating(catalog_item):
     reviews = Review.objects.all().filter(catalog_item=catalog_item)
     avg_rate = reviews.aggregate(Avg('rating'))['rating__avg']
-    avg_rate = round(avg_rate, 2)
-    CatalogItem.objects.filter(id=catalog_item.id).update(average_rating=avg_rate)
+    if avg_rate is not None:
+        avg_rate = round(avg_rate, 2)
+        CatalogItem.objects.filter(id=catalog_item.id).update(average_rating=avg_rate)
 
 
 def add_review(request, id):
@@ -105,10 +106,11 @@ def add_review(request, id):
 
 def like_review(request, review_id):
     if request.user.is_authenticated:
-        if request.method == "POST":
-            review = Review.objects.get(id=review_id)
-            review.likes.add(request.user)
-            return redirect('main:reviewdetails', review_id)
+        review = Review.objects.get(id=review_id)
+        if review.user != request.user:
+            if request.method == "POST":
+                review.likes.add(request.user)
+        return redirect('main:reviewdetails', review_id)
     return redirect('main:signin')
 
 
@@ -157,17 +159,18 @@ def update_average_review_star_rating(review_id):
 
 
 def add_star_rating(request, review_id):
-    form = RatingForm(request.POST)
-    if form.is_valid():
-        Rating.objects.update_or_create(
-            user=request.user,
-            review_id=int(review_id),
-            defaults={'star_id': int(request.POST.get("star"))}
-        )
-        update_average_review_star_rating(review_id)
-        redirect('main:reviewdetails', review_id)
-    else:
-        return HttpResponse(status=400)
+    review=Review.objects.get(id=review_id)
+    if review.user != request.user:
+        form = RatingForm(request.POST)
+        if form.is_valid():
+            Rating.objects.update_or_create(
+                user=request.user,
+                review_id=int(review_id),
+                defaults={'star_id': int(request.POST.get("star"))}
+            )
+            update_average_review_star_rating(review_id)
+            redirect('main:reviewdetails', review_id)
+    return HttpResponse(status=400)
 
 
 def review_details(request, id):
@@ -178,3 +181,4 @@ def review_details(request, id):
         'star_form': star_form,
     }
     return render(request, "main/reviewdetails.html", context)
+
